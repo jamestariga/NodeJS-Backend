@@ -4,7 +4,7 @@ const path = require('path')
 const PORT = process.env.PORT || 3500
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+  res.sendFile(path.join(__dirname, 'Views', 'index.html'))
 })
 
 app.listen(PORT, () => {
