@@ -8,11 +8,7 @@ const PORT = process.env.PORT || 3500
 
 app.use(logger)
 
-const whitelist = [
-  'http://localhost:3000',
-  'http://localhost:3500',
-  'https://www.google.ca',
-]
+const whitelist = ['http://localhost:3000', 'http://localhost:3500']
 const corsOption = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -25,53 +21,49 @@ const corsOption = {
   optionsSuccessStatus: 200,
 }
 
+// Cors middleware
 app.use(cors(corsOption))
 
+// Built in middleware
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-app.use(express.static(path.join(__dirname, '/Public')))
 
-app.get('^/$|index(.html)?', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Views', 'index.html'))
-})
+// Static files
+app.use('/', express.static(path.join(__dirname, '/Public')))
+app.use('/subdir', express.static(path.join(__dirname, '/Public')))
 
-app.get('/new-page(.html)?', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Views', 'new-page.html'))
-})
+app.use('/', require('./Routes/root'))
+app.use('/subdir', require('./Routes/subdir'))
 
-app.get('/old-page(.html)?', (req, res) => {
-  res.redirect(301, '/new-page.html') //302 by default
-})
+// // Route handlers
+// app.get(
+//   '/hello(.html)?',
+//   (req, res, next) => {
+//     console.log('attempted to load hello.html')
+//     next()
+//   },
+//   (req, res) => {
+//     res.send('Hello World!')
+//   }
+// )
 
-// Route handlers
-app.get(
-  '/hello(.html)?',
-  (req, res, next) => {
-    console.log('attempted to load hello.html')
-    next()
-  },
-  (req, res) => {
-    res.send('Hello World!')
-  }
-)
+// // chaining route handlers
+// const one = (req, res, next) => {
+//   console.log('one')
+//   next()
+// }
 
-// chaining route handlers
-const one = (req, res, next) => {
-  console.log('one')
-  next()
-}
+// const two = (req, res, next) => {
+//   console.log('two')
+//   next()
+// }
 
-const two = (req, res, next) => {
-  console.log('two')
-  next()
-}
+// const three = (req, res) => {
+//   console.log('three')
+//   res.send('Finished!')
+// }
 
-const three = (req, res) => {
-  console.log('three')
-  res.send('Finished!')
-}
-
-app.get('/chain(.html)?', [one, two, three])
+// app.get('/chain(.html)?', [one, two, three])
 
 app.all('*', (req, res) => {
   res.status(404)
