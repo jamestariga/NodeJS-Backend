@@ -6,7 +6,7 @@ const { logger } = require('./middleware/logEvents')
 const errorHandler = require('./middleware/errorHandler')
 const PORT = process.env.PORT || 3500
 
-app.use(logger)
+// app.use(logger)
 
 const whitelist = ['http://localhost:3000', 'http://localhost:3500']
 const corsOption = {
@@ -32,8 +32,10 @@ app.use(express.json())
 app.use('/', express.static(path.join(__dirname, '/Public')))
 app.use('/subdir', express.static(path.join(__dirname, '/Public')))
 
+// Routes
 app.use('/', require('./Routes/root'))
 app.use('/subdir', require('./Routes/subdir'))
+app.use('/employees', require('./Routes/api/employees'))
 
 // // Route handlers
 // app.get(
