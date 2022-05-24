@@ -6,6 +6,8 @@ const corsOption = require('./Configs/corsOptions')
 const { logger } = require('./middleware/logEvents')
 const errorHandler = require('./middleware/errorHandler')
 const root = require('./Routes/root')
+const register = require('./Routes/register')
+const auth = require('./Routes/auth')
 const PORT = process.env.PORT || 3500
 
 // app.use(logger)
@@ -22,6 +24,8 @@ app.use('/', express.static(path.join(__dirname, '/Public')))
 
 // Routes
 app.use('/', root)
+app.use('/register', register)
+app.use('/auth', auth)
 app.use('/employees', require('./Routes/api/employees'))
 
 app.all('*', (req, res) => {
