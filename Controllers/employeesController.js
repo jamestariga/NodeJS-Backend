@@ -4,6 +4,9 @@ const data = {
   setEmployees: function (data) {
     this.employees = data
   },
+  // setEmployees(data) {
+  //   this.employees = data
+  // },
 }
 
 const getAllEmployees = (req, res) => {
