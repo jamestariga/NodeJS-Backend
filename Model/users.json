@@ -5,6 +5,7 @@
   },
   {
     "username": "Tim2",
-    "password": "$2b$10$rIGd2YDmaSSYbGRXOt5jyOFbRYnXqeZgmWKDGgBvb2//AZREntHBS"
+    "password": "$2b$10$rIGd2YDmaSSYbGRXOt5jyOFbRYnXqeZgmWKDGgBvb2//AZREntHBS",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRpbTIiLCJpYXQiOjE2NTM1MjYzNzQsImV4cCI6MTY1MzYxMjc3NH0.ojlklI9f0qPNyeSW5fIlC8ZBVrZDp5jGHkdNnWHsseA"
   }
 ]
