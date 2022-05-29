@@ -22,7 +22,10 @@ const handleLogout = async (req, res) => {
   )
 
   if (!foundUser) {
-    res.clearCookie('JWT', { httpOnly: true, sameSite: 'None', secure: true }) // Add secure: true for production but not for development
+    res.clearCookie('JWT', {
+      httpOnly: true,
+      // sameSite: 'None' /*secure: true*/,
+    }) // Add secure: true for production but not for development
     return res.sendStatus(204)
   }
 
@@ -40,7 +43,9 @@ const handleLogout = async (req, res) => {
     JSON.stringify(usersDB.users)
   )
 
-  res.clearCookie('JWT', { httpOnly: true, sameSite: 'None', secure: true }) // Add secure: true for production but not for development
+  res.clearCookie('JWT', {
+    httpOnly: true /*sameSite: 'None'*/ /*secure: true*/,
+  }) // Add secure: true for production but not for development
   res.sendStatus(204)
 }
 

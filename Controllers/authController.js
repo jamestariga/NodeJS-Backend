@@ -27,9 +27,15 @@ const handleLogin = async (req, res) => {
   const match = await bcrypt.compare(password, foundUser.password)
 
   if (match) {
+    const roles = Object.values(foundUser.roles)
     // This is where JWTs would be created
     const accessToken = JWT.sign(
-      { username: foundUser.username },
+      {
+        UserInfo: {
+          username: foundUser.username,
+          roles: roles,
+        },
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '30s' }
     )
@@ -57,8 +63,8 @@ const handleLogin = async (req, res) => {
     // Add secure: true for production but not for development
     res.cookie('JWT', refreshToken, {
       httpOnly: true,
-      sameSite: 'None',
-      secure: true,
+      // sameSite: 'None',
+      // secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     })
 
