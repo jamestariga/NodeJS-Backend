@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -8,12 +9,17 @@ const errorHandler = require('./Middleware/errorHandler')
 const verifyJWT = require('./Middleware/verifyJWT')
 const credentials = require('./Middleware/credentials')
 const cookieParser = require('cookie-parser')
+const mongoose = require('mongoose')
 const root = require('./Routes/root')
 const register = require('./Routes/register')
 const auth = require('./Routes/auth')
 const refreshToken = require('./Routes/refreshToken')
 const logout = require('./Routes/logout')
+const connectDB = require('./Configs/dbConn')
 const PORT = process.env.PORT || 3500
+
+// Connect to MongoDB
+connectDB()
 
 // app.use(logger)
 
@@ -57,6 +63,9 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB')
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
+  })
 })
