@@ -49,6 +49,7 @@ app.use('/logout', logout)
 // Verify JWT
 app.use(verifyJWT)
 app.use('/employees', require('./Routes/api/employees'))
+app.use('/users', require('./Routes/api/users'))
 
 app.all('*', (req, res) => {
   res.status(404)
