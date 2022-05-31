@@ -1,25 +1,16 @@
-const usersDB = {
-  users: require('../Model/users.json'),
-  setUsers: function (data) {
-    this.users = data
-  },
-}
+const User = require('../Model/User')
 
 // Dependency injection
 const JWT = require('jsonwebtoken')
 
-const handleRefreshToken = (req, res) => {
+const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies
 
   if (!cookies?.JWT) return res.sendStatus(401)
 
-  console.log(cookies.JWT)
-
   const refreshToken = cookies.JWT
 
-  const foundUser = usersDB.users.find(
-    (person) => person.refreshToken === refreshToken
-  )
+  const foundUser = await User.findOne({ refreshToken }).exec()
 
   if (!foundUser) return res.sendStatus(403)
 
@@ -32,7 +23,7 @@ const handleRefreshToken = (req, res) => {
     const accessToken = JWT.sign(
       {
         UserInfo: {
-          username: foundUser.username,
+          username: decoded.username,
           roles: roles,
         },
       },

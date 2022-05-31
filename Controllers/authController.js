@@ -1,15 +1,8 @@
-const usersDB = {
-  users: require('../Model/users.json'),
-  setUsers: function (data) {
-    this.users = data
-  },
-}
+const User = require('../Model/User')
 
 // Dependency injection
 const bcrypt = require('bcrypt')
 const JWT = require('jsonwebtoken')
-const fsPromises = require('fs').promises
-const path = require('path')
 
 const handleLogin = async (req, res) => {
   const { user, password } = req.body
@@ -18,7 +11,7 @@ const handleLogin = async (req, res) => {
     return res.status(400).json({ message: 'Missing user or password' })
   }
 
-  const foundUser = usersDB.users.find((person) => person.username === user)
+  const foundUser = await User.findOne({ username: user }).exec()
 
   if (!foundUser) return res.sendStatus(401)
 
@@ -36,7 +29,7 @@ const handleLogin = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '30s' }
+      { expiresIn: '60s' }
     )
 
     const refreshToken = JWT.sign(
@@ -46,23 +39,14 @@ const handleLogin = async (req, res) => {
     )
 
     // Saving the refresh token to the database
-    const otherUsers = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    )
-
-    const currentUser = { ...foundUser, refreshToken }
-
-    usersDB.setUsers([...otherUsers, currentUser])
-
-    await fsPromises.writeFile(
-      path.join(__dirname, '..', 'Model', 'users.json'),
-      JSON.stringify(usersDB.users)
-    )
+    foundUser.refreshToken = refreshToken
+    const result = await foundUser.save()
+    console.log(result)
 
     // Add secure: true for production but not for development
     res.cookie('JWT', refreshToken, {
       httpOnly: true,
-      // sameSite: 'None',
+      sameSite: 'None',
       // secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     })
