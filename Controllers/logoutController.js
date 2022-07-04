@@ -15,7 +15,7 @@ const handleLogout = async (req, res) => {
     res.clearCookie('JWT', {
       httpOnly: true,
       sameSite: 'None',
-      // secure: true,
+      secure: true,
     }) // Add secure: true for production but not for development
     return res.sendStatus(204)
   }
@@ -28,7 +28,7 @@ const handleLogout = async (req, res) => {
   res.clearCookie('JWT', {
     httpOnly: true,
     sameSite: 'None',
-    // secure: true,
+    secure: true,
   }) // Add secure: true for production but not for development
   res.sendStatus(204)
 }
